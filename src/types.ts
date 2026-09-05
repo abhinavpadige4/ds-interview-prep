@@ -69,3 +69,14 @@ export interface CategoryTab {
   icon: React.ComponentType<{ className?: string }>;
   progress: number;
 }
+
+export interface SearchFilterProps {
+  onSearch: (query: string) => void;
+  placeholder?: string;
+}
+
+export interface ProgressTrackerProps {
+  category: keyof ProgressData;
+  current: number;
+  total: number;
+}
