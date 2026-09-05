@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 interface ProblemCardProps {
   id: number;
@@ -17,57 +17,44 @@ const ProblemCard: React.FC<ProblemCardProps> = ({
   onSolve, 
   isSolved 
 }) => {
-  const [isHovered, setIsHovered] = useState(false);
-
   const difficultyColors: Record<'Easy' | 'Medium' | 'Hard', string> = {
     Easy: '#10b981',
     Medium: '#f59e0b',
-    Hard: '#ef4444',
+    Hard: '#ef4444'
   };
 
   return (
-    <div
-      className={`group relative flex flex-col h-full bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-6 hover:shadow-xl hover:bg-white/10 transition-all duration-300 transform hover:-translate-y-1 cursor-pointer`}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+    <div 
+      className="bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-xl p-6 hover:border-purple-500/50 transition-all duration-300 transform hover:-translate-y-1"
     >
-      <div className="flex items-center justify-between mb-4">
-        <span className={`px-3 py-1 text-xs font-medium rounded-full bg-${difficultyColors[difficulty]}/20 text-${difficultyColors[difficulty]}`}>
+      <div className="flex justify-between items-start mb-4">
+        <h3 className="text-lg font-semibold text-white">{title}</h3>
+        <span 
+          className={`px-3 py-1 text-xs font-medium rounded-full bg-${difficulty[difficulty.toLowerCase() as keyof typeof difficulty]}-100 text-${difficulty[difficulty.toLowerCase() as keyof typeof difficulty]}`}
+        >
           {difficulty}
         </span>
-        <span className="text-xs text-white/50">{category}</span>
       </div>
-
-      <h3 className="text-lg font-semibold text-white mb-3 line-clamp-2">
-        {title}
-      </h3>
-
-      <div className="flex items-center justify-between mt-auto pt-4">
+      
+      <p className="text-gray-400 mb-4">{category}</p>
+      
+      <div className="flex items-center justify-between">
         <button
           onClick={onSolve}
-          className={`flex items-center px-4 py-2 text-sm font-medium rounded-lg bg-white/10 hover:bg-white/20 transition-colors duration-200 border border-white/10 text-white/90`}
+          className="flex-1 px-4 py-2 bg-purple-600/20 border border-purple-500/30 text-purple-400 rounded-lg hover:bg-purple-600/30 hover:text-white transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
           disabled={isSolved}
         >
-          {isSolved ? (
-            <span className="flex items-center">
-              <svg className="w-4 h-4 mr-2 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
-              </svg>
-              Solved
-            </span>
-          ) : (
-            <span>Solve Problem</span>
-          )}
+          {isSolved ? 'Solved' : 'Solve'}
         </button>
-
-        <div className="flex items-center gap-2">
-          <span className="text-xs text-white/60">Progress</span>
-          <div className="w-10 h-2 bg-white/10 rounded-full overflow-hidden">
-            <div
-              className={`h-full bg-gradient-to-r from-purple-500 to-pink-500 transition-all duration-300 ${isSolved ? 'w-full' : 'w-0'}`}
-            ></div>
-          </div>
-        </div>
+        
+        {!isSolved && (
+          <button
+            onClick={() => alert('Solution modal would open here')}
+            className="ml-3 px-4 py-2 bg-purple-600/20 border border-purple-500/30 text-purple-400 rounded-lg hover:bg-purple-600/30 hover:text-white transition-all duration-300"
+          >
+            View Solution
+          </button>
+        )}
       </div>
     </div>
   );
