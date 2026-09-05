@@ -1,116 +1,85 @@
 import React, { useState } from 'react';
 
-interface CategoryItem {
-  id: string;
-  title: string;
-  description?: string;
-  completed?: boolean;
-}
-
 interface CategoryTabProps {
-  categoryName: string;
-  items: CategoryItem[];
-  onItemComplete: (itemId: string) => void;
+  category: string;
+  items: Array<{
+    id: string | number;
+    title: string;
+    description?: string;
+    completed?: boolean;
+  }>;
+  onItemToggle?: (id: string | number) => void;
 }
 
-const CategoryTab: React.FC<CategoryTabProps> = ({ categoryName, items, onItemComplete }) => {
+const CategoryTab: React.FC<CategoryTabProps> = ({ category, items, onItemToggle }) => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [activeTab, setActiveTab] = useState<'all' | 'completed' | 'pending'>('all');
 
   const filteredItems = items.filter(item =>
-    item.title.toLowerCase().includes(searchTerm.toLowerCase())
+    item.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (item.description && item.description.toLowerCase().includes(searchTerm.toLowerCase()))
   );
-
-  const displayedItems = filteredItems.filter(item => {
-    if (activeTab === 'completed') return item.completed === true;
-    if (activeTab === 'pending') return item.completed !== true;
-    return true;
-  });
-
-  const handleToggleComplete = (id: string) => {
-    onItemComplete(id);
-  };
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      <div className="flex items-center space-x-3 mb-4">
+        <h2 className="text-xl font-bold text-white">{category}</h2>
+        <span className="text-sm text-gray-400">{filteredItems.length} / {items.length} items</span>
+      </div>
+      
+      <div className="relative">
         <input
           type="text"
-          placeholder="Search questions..."
+          placeholder="Search questions, topics, or keywords..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full sm:w-64 px-4 py-3 bg-gray-800/50 border border-purple-600/30 rounded-lg text-white placeholder-white/40 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-300 backdrop-blur-sm"
+          className="w-full pl-10 pr-4 py-3 bg-gray-800/50 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-200"
         />
-        <div className="flex sm:gap-2">
-          <button
-            onClick={() => setActiveTab('all')}
-            className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 ${activeTab === 'all'
-              ? 'bg-purple-600/30 text-white/90 hover:bg-purple-600/40'
-              : 'bg-gray-800/50 text-white/60 hover:bg-gray-800/60 hover:text-white/80'
-            }`}
-          >
-            All
-          </button>
-          <button
-            onClick={() => setActiveTab('completed')}
-            className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 ${activeTab === 'completed'
-              ? 'bg-purple-600/30 text-white/90 hover:bg-purple-600/40'
-              : 'bg-gray-800/50 text-white/60 hover:bg-gray-800/60 hover:text-white/80'
-            }`}
-          >
-            Completed
-          </button>
-          <button
-            onClick={() => setActiveTab('pending')}
-            className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-300 ${activeTab === 'pending'
-              ? 'bg-purple-600/30 text-white/90 hover:bg-purple-600/40'
-              : 'bg-gray-800/50 text-white/60 hover:bg-gray-800/60 hover:text-white/80'
-            }`}
-          >
-            Pending
-          </button>
-        </div>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400"
+          fill="none"
+          viewBox="0 0 24 24"
+          strokeWidth={2}
+          stroke="currentColor"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-4.35-4.35M17 10a7 7 0 11-14 0z" />
+        </svg>
       </div>
 
+      {filteredItems.length === 0 && (
+        <div className="text-center py-8 text-gray-500">
+          No items match your search. Try a different term.
+        </div>
+      )}
+
       <div className="space-y-3">
-        {displayedItems.length === 0 ? (
-          <p className="text-center text-white/50 py-8">
-            No items match your search.
-          </p>
-        ) : (
-          displayedItems.map(item => (
-            <div
-              key={item.id}
-              className="flex items-start gap-4 bg-gray-800/50 border border-purple-600/30 rounded-lg p-4 hover:bg-gray-800/60 transition-all duration-300 backdrop-blur-sm transform hover:-translate-y-0.5"
-            >
-              <div className="flex-shrink-0 mt-1 flex h-5 w-5 items-center justify-center">
+        {filteredItems.map(item => (
+          <div
+            key={item.id}
+            className={`group relative bg-gray-800/50 backdrop-blur-sm border border-gray-700/50 rounded-xl p-4 hover:border-purple-500/50 hover:bg-gray-800/70 transition-all duration-300 transform hover:-translate-y-0.5`}
+          >
+            <div className="flex items-start space-x-3">
+              <div className="flex-shrink-0 mt-0.5">
                 <input
                   type="checkbox"
-                  checked={item.completed === true}
-                  onChange={() => handleToggleComplete(item.id)}
+                  checked={item.completed || false}
+                  onChange={() => onItemToggle?.(item.id)}
                   className="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-600 rounded"
                 />
               </div>
-              <div className="flex-1 space-y-1">
-                <h3 className={`font-semibold text-white/90 line-clamp-1 ${item.completed === true ? 'text-purple-400' : ''}`}>
-                  {item.title}
-                </h3>
+              <div className="flex-1 min-w-0">
+                <h3 className="font-medium text-white truncate">{item.title}</h3>
                 {item.description && (
-                  <p className="text-white/60 text-sm line-clamp-2">
-                    {item.description}
-                  </p>
+                  <p className="mt-1 text-sm text-gray-400 line-clamp-2">{item.description}</p>
                 )}
               </div>
             </div>
-          ))
-        )}
+            <div className="absolute inset-0 pointer-events-none">
+              <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-purple-500/10 via-transparent to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            </div>
+          </div>
+        ))}
       </div>
-
-      {displayedItems.length > 0 && (
-        <div className="text-xs text-white/50 mt-2">
-          Showing {displayedItems.length} of {filteredItems.length} items
-        </div>
-      )}
     </div>
   );
 };
