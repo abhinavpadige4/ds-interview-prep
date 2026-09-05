@@ -1,10 +1,8 @@
 export interface ProgressData {
-  python: number;
-  statistics: number;
-  ml: number;
-  sql: number;
-  systemDesign: number;
-  behavioral: number;
+  [category: string]: {
+    completed: number;
+    total: number;
+  };
 }
 
 export interface PythonChallenge {
@@ -17,12 +15,12 @@ export interface PythonChallenge {
   hints: string[];
 }
 
-export interface StatisticsTopic {
+export interface StatsConcept {
   id: number;
   title: string;
-  content: string;
-  formulas: string[];
-  examples: string[];
+  formula: string;
+  explanation: string;
+  example: string;
 }
 
 export interface MLQuestion {
@@ -39,22 +37,21 @@ export interface SQLQuery {
   description: string;
   query: string;
   expectedOutput: string;
-  explanation: string;
+  schema: string;
   tags: ('Joins' | 'Window Functions' | 'CTEs')[];
 }
 
-export interface SystemDesignTopic {
+export interface SystemDesignPrompt {
   id: number;
-  title: string;
-  description: string;
-  keyComponents: string[];
+  scenario: string;
   considerations: string[];
+  bestPractices: string[];
 }
 
 export interface BehavioralQuestion {
   id: number;
   question: string;
-  starMethod: {
+  starGuide: {
     situation: string;
     task: string;
     action: string;
@@ -67,7 +64,7 @@ export interface CategoryTab {
   id: string;
   name: string;
   icon: React.ComponentType<{ className?: string }>;
-  progress: number;
+  color: string;
 }
 
 export interface SearchFilterProps {
@@ -76,7 +73,7 @@ export interface SearchFilterProps {
 }
 
 export interface ProgressTrackerProps {
-  category: keyof ProgressData;
-  current: number;
+  category: string;
+  progress: number;
   total: number;
 }
