@@ -12,7 +12,7 @@ export const loadProgress = (): ProgressData => {
     try {
       return JSON.parse(saved) as ProgressData;
     } catch (e) {
-      console.warn('Failed to parse progress data, resetting to default');
+      console.warn('Failed to parse progress data, using defaults');
       return getDefaultProgress();
     }
   }
@@ -28,16 +28,18 @@ export const saveProgress = (progress: ProgressData): void => {
   }
 };
 
-export const updateProgress = (category: keyof ProgressData, completed: boolean): ProgressData => {
+export const updateProgress = (
+  category: keyof ProgressData,
+  increment: number = 1
+): ProgressData => {
   const current = loadProgress();
-  const updated = { ...current };
-  
-  if (completed) {
-    updated[category] = Math.min(100, updated[category] + 10);
-  } else {
-    updated[category] = Math.max(0, updated[category] - 10);
-  }
-  
+  const updated = {
+    ...current,
+    [category]: Math.min(
+      current[category] + increment,
+      getCategoryTotal(category)
+    ),
+  };
   saveProgress(updated);
   return updated;
 };
@@ -54,5 +56,17 @@ const getDefaultProgress = (): ProgressData => ({
   ml: 0,
   sql: 0,
   systemDesign: 0,
-  behavioral: 0
+  behavioral: 0,
 });
+
+const getCategoryTotal = (category: keyof ProgressData): number => {
+  switch (category) {
+    case 'python': return 10;
+    case 'statistics': return 8; // Assuming 8 topics
+    case 'ml': return 20;
+    case 'sql': return 15;
+    case 'systemDesign': return 6; // Assuming 6 topics
+    case 'behavioral': return 10; // Assuming 10 questions
+    default: return 0;
+  }
+};
