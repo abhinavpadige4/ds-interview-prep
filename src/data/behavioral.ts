@@ -1,122 +1,52 @@
 export const behavioralQuestions = [
   {
     id: 1,
-    question: "Tell me about a time you had to explain a complex technical concept to a non-technical stakeholder.",
-    answer: "Situation: I needed to convince marketing to adopt a new customer segmentation model based on clustering. Task: Explain how the model works and why it’s better than their current rule-based approach. Action: I avoided jargon, used a visual analogy (grouping similar customers like sorting fruits by color and size), showed a before/after comparison of campaign ROI, and provided a simple one-pager with key metrics. Result: They approved the pilot, which led to a 22% increase in conversion rate.",
-    difficulty: "Medium",
-    starBreakdown: {
-      situation: "Needed to convince marketing to adopt a new customer segmentation model based on clustering.",
-      task: "Explain how the model works and why it’s better than their current rule-based approach.",
-      action: "Avoided jargon, used a visual analogy (grouping similar customers like sorting fruits by color and size), showed a before/after comparison of campaign ROI, and provided a simple one-pager with key metrics.",
-      result: "They approved the pilot, which led to a 22% increase in conversion rate."
-    }
+    question: "Tell me about a time you faced a difficult stakeholder and how you handled it.",
+    answer: "Situation: As a data scientist at a fintech startup, I was tasked with building a credit risk model, but the head of lending resisted using ML, preferring traditional rule-based systems due to distrust in 'black box' models.\nTask: I needed to gain their trust and secure buy-in for the ML model to proceed with deployment.\nAction: I scheduled a 1:1 meeting to understand their concerns — they worried about explainability and regulatory compliance. I then built a simplified version of the model using logistic regression with L1 regularization for interpretability, and generated SHAP plots to show feature impact. I presented a side-by-side comparison: ML model reduced false negatives by 22% while maintaining same false positive rate. I also walked them through how the model met Fair Lending Act requirements via disparate impact analysis.\nResult: They approved the model for pilot testing. After 3 months, the pilot showed 15% increase in approved low-risk loans. They became an advocate for ML in other teams and invited me to present at the quarterly risk committee.",
   },
   {
     id: 2,
-    question: "Describe a time when you disagreed with a team member on a technical approach. How did you handle it?",
-    answer: "Situation: A colleague wanted to use a complex deep learning model for a small dataset problem; I argued for a simpler logistic regression. Task: Reach consensus on the best approach. Action: I proposed we both train our models on a small validation set and compare interpretability, training time, and performance. We documented results and discussed trade-offs in a team meeting. Result: We agreed on logistic regression due to better explainability and similar accuracy; the model was deployed faster and gained stakeholder trust.",
-    difficulty: "Medium",
-    starBreakdown: {
-      situation: "A colleague wanted to use a complex deep learning model for a small dataset problem; I argued for a simpler logistic regression.",
-      task: "Reach consensus on the best approach.",
-      action: "Proposed we both train our models on a small validation set and compare interpretability, training time, and performance. We documented results and discussed trade-offs in a team meeting.",
-      result: "We agreed on logistic regression due to better explainability and similar accuracy; the model was deployed faster and gained stakeholder trust."
-    }
+    question: "Describe a project where you had to work with messy or incomplete data. What did you do?",
+    answer: "Situation: I was assigned to predict patient readmission rates using EHR data from multiple hospitals, but 40% of lab results were missing, and patient IDs were inconsistently formatted across systems.\nTask: I needed to clean and integrate the data to build a usable predictive model within a 6-week deadline.\nAction: I first profiled the data using Python’s pandas-profiling to identify missingness patterns — discovered missingness was not random (higher in elderly patients). I used MICE (Multiple Imputation by Chained Equations) for lab values, leveraging correlations with vitals and demographics. For patient IDs, I built a fuzzy matching algorithm using fuzzywuzzy and phonetic encoding (Soundex) to resolve duplicates, then manually reviewed uncertain matches. I created a data quality dashboard to track imputation rates and flagged outliers for clinical review.\nResult: After cleaning, we achieved 92% data completeness. The resulting model achieved an AUC of 0.81, significantly better than the baseline (0.68). The hospital adopted the model for discharge planning, reducing readmissions by 18% over 4 months.",
   },
   {
     id: 3,
-    question: "Give an example of a project where you had to learn a new technology quickly to meet a deadline.",
-    answer: "Situation: Our team needed to deploy a real-time dashboard using Apache Flink, but none of us had prior experience. Task: Learn Flink and build the pipeline in two weeks. Action: I completed the official Flink training, built a small prototype with Kafka integration, and pair-programmed with a senior engineer. I documented common pitfalls and shared them in a team wiki. Result: We delivered the dashboard on time, which reduced incident response time by 40%.",
-    difficulty: "Hard",
-    starBreakdown: {
-      situation: "Our team needed to deploy a real-time dashboard using Apache Flink, but none of us had prior experience.",
-      task: "Learn Flink and build the pipeline in two weeks.",
-      action: "Completed the official Flink training, built a small prototype with Kafka integration, and pair-programmed with a senior engineer. I documented common pitfalls and shared them in a team wiki.",
-      result: "We delivered the dashboard on time, which reduced incident response time by 40%."
-    }
+    question: "Give an example of when you had to learn a new technology quickly to complete a project.",
+    answer: "Situation: Our team needed to deploy a real-time recommendation engine, but our infrastructure was batch-only. I had never used Kafka or streaming systems before.\nTask: I had to learn and implement a streaming pipeline to process user events and update recommendations within 5 minutes of behavior.\nAction: I dedicated two days to intensive self-study: completed Confluent’s Kafka fundamentals course, built a local Kafka cluster with Docker, and practiced producing/consuming Avro-serialized events. I then used Kafka Streams to aggregate user-session features in tumbling windows and fed them into a lightweight online learning model (Vowpal Wabbit). I containerized the service and deployed it to Kubernetes using Helm charts I learned from the official docs.\nResult: Within 10 days, we had a working prototype. The system processed 50K events/sec with <200ms latency. The model improved CTR by 12% over batch-based recommendations. I later led a workshop to train the team on Kafka Streams, reducing future onboarding time.",
   },
   {
     id: 4,
     question: "Tell me about a time you failed. What did you learn?",
-    answer: "Situation: I deployed a model without proper validation on time-based splits, leading to overfitting. Task: Address the sudden drop in production accuracy. Action: I conducted a post-mortem, realized I had leaked future data during feature creation, and corrected the pipeline. I implemented strict time-series cross-validation and added automated tests to prevent leakage. Result: The model’s performance stabilized, and I now advocate for rigorous validation practices in all ML projects.",
-    difficulty: "Medium",
-    starBreakdown: {
-      situation: "I deployed a model without proper validation on time-based splits, leading to overfitting.",
-      task: "Address the sudden drop in production accuracy.",
-      action: "Conducted a post-mortem, realized I had leaked future data during feature creation, and corrected the pipeline. I implemented strict time-series cross-validation and added automated tests to prevent leakage.",
-      result: "The model’s performance stabilized, and I now advocate for rigorous validation practices in all ML projects."
-    }
+    answer: "Situation: I was tasked with building a demand forecasting model for retail inventory. I rushed into modeling without fully understanding the business context.\nTask: I needed to deliver accurate weekly forecasts to reduce overstock and stockouts.\nAction: I built a complex LSTM model using 2 years of sales data, achieving excellent validation accuracy (MAPE 8%). However, when deployed, it performed poorly — stockouts increased by 15%.\nResult: After investigation, I realized I had not accounted for promotional events or weather effects, which drove 30% of demand variance. The model was overfitting to noise in the training data because I didn’t validate on holdout periods that included major holidays.\nLearning: I now always start with exploratory data analysis and stakeholder interviews to identify key drivers. I validate models using time-based splits, not random splits. I also incorporate external features (holidays, weather, events) as standard practice. This failure taught me that model accuracy ≠ business impact — understanding the problem domain is paramount.",
   },
   {
     id: 5,
-    question: "Describe a situation where you had to work with incomplete or messy data.",
-    answer: "Situation: We were building a churn model but 30% of customer support logs were unstructured text with missing fields. Task: Extract usable features from this data. Action: I used spaCy for NER to extract product names and issue types, applied regex for ticket IDs, and used fuzzy matching to link to customer IDs. I created a feature indicating 'support contact frequency' and sentiment score from text. Result: The enriched features improved model AUC by 0.08, and we documented the cleaning pipeline for reproducibility.",
-    difficulty: "Hard",
-    starBreakdown: {
-      situation: "We were building a churn model but 30% of customer support logs were unstructured text with missing fields.",
-      task: "Extract usable features from this data.",
-      action: "Used spaCy for NER to extract product names and issue types, applied regex for ticket IDs, and used fuzzy matching to link to customer IDs. I created a feature indicating 'support contact frequency' and sentiment score from text.",
-      result: "The enriched features improved model AUC by 0.08, and we documented the cleaning pipeline for reproducibility."
-    }
+    question: "Describe a time you had to convince a team to adopt a data-driven approach over intuition.",
+    answer: "Situation: The marketing team insisted on allocating budget based on past performance and gut feeling, ignoring attribution data showing declining ROI on TV ads.\nTask: I needed to shift their mindset to use data for budget allocation.\nAction: I built a marketing mix model (MMM) using regression with lagged ad spend, controlling for seasonality and competition. I visualized the ROI curve: TV ads had diminishing returns after $500k/month, while digital and email showed linear ROI. I ran a simulation showing that reallocating 20% of TV budget to SEO and email could increase conversions by 18% without increasing spend.\nResult: I presented the findings in a 15-minute story-driven deck with clear visuals and a simple ROI calculator. The CMO agreed to a 3-month pilot. After the pilot, conversions rose 16% and CAC dropped 12%. The team now runs monthly MMM updates and uses the model in quarterly planning.",
   },
   {
     id: 6,
-    question: "Tell me about a time you improved a process or workflow.",
-    answer: "Situation: Our team spent hours manually updating model versions in production. Task: Automate the deployment pipeline. Action: I designed a CI/CD pipeline using GitHub Actions: on push to main, run tests, build Docker image, push to ECR, and deploy to EKS with ArgoCD. Added model validation gates and rollback on failure. Result: Deployment time reduced from 4 hours to 20 minutes, and we increased release frequency from monthly to weekly.",
-    difficulty: "Medium",
-    starBreakdown: {
-      situation: "Our team spent hours manually updating model versions in production.",
-      task: "Automate the deployment pipeline.",
-      action: "Designed a CI/CD pipeline using GitHub Actions: on push to main, run tests, build Docker image, push to ECR, and deploy to EKS with ArgoCD. Added model validation gates and rollback on failure.",
-      result: "Deployment time reduced from 4 hours to 20 minutes, and we increased release frequency from monthly to weekly."
-    }
+    question: "Tell me about a time you had to work under tight deadlines. How did you manage it?",
+    answer: "Situation: Two days before a major investor demo, the VP of Product asked me to predict which features would drive user retention in the next quarter — a task that usually takes 3 weeks.\nTask: Deliver a credible, actionable prediction model in 48 hours.\nAction: I immediately scoped the problem: instead of building a new model, I leveraged our existing feature usage logs and churn labels. I used a pre-trained XGBoost model from a similar project (with permission) and fine-tuned it on our last 3 months of data. I automated feature extraction with a Python script and used SHAP to quickly identify top drivers: 'notification opt-in rate', 'weekly session frequency', and 'completion of onboarding tutorial'. I created a one-page summary with recommendations and confidence intervals.\nResult: I delivered the report 36 hours before the demo. The VP used it to prioritize improving the onboarding flow and push notifications. The resulting changes increased 30-day retention by 9% in the following quarter. I learned that under pressure, leveraging existing assets and focusing on interpretability beats building from scratch.",
   },
   {
     id: 7,
-    question: "Give an example of how you handled conflicting priorities.",
-    answer: "Situation: I was asked to finish a model report while also fixing a production data pipeline issue. Task: Manage both without missing deadlines. Action: I assessed impact: the pipeline issue affected real-time scoring, so I prioritized it. I communicated the delay to stakeholders, fixed the pipeline in 2 hours, then completed the report. I also suggested a weekly sync to better align priorities. Result: Both tasks were completed on time, and the stakeholder appreciated my transparency.",
-    difficulty: "Medium",
-    starBreakdown: {
-      situation: "I was asked to finish a model report while also fixing a production data pipeline issue.",
-      task: "Manage both without missing deadlines.",
-      action: "Assessed impact: the pipeline issue affected real-time scoring, so I prioritized it. I communicated the delay to stakeholders, fixed the pipeline in 2 hours, then completed the report. I also suggested a weekly sync to better align priorities.",
-      result: "Both tasks were completed on time, and the stakeholder appreciated my transparency."
-    }
+    question: "Describe a time you disagreed with a colleague’s approach. How did you handle it?",
+    answer: "Situation: A colleague wanted to drop all rows with missing values in a customer survey dataset to 'keep it clean', but I knew this would remove 35% of our sample and introduce bias.\nTask: I needed to persuade them to use a better imputation strategy without causing conflict.\nAction: I asked clarifying questions to understand their concern — they feared imputation would distort results. I then ran a quick comparison: complete-case analysis vs. MICE imputation on a subset. I showed that dropping rows biased the sample toward younger, more responsive users, skewing NPS upward by 0.8 points. I shared a visualization of the missingness mechanism (MAR) and cited literature supporting MICE for survey data.\nResult: We agreed to use MICE with sensitivity analysis. We documented both approaches in the appendix. The final report was more credible, and my colleague thanked me for preventing a flawed conclusion. I learned that framing disagreement as collaborative problem-solving, not opposition, leads to better outcomes.",
   },
   {
     id: 8,
-    question: "Describe a time you had to convince your team to adopt a new tool or methodology.",
-    answer: "Situation: The team was using Jupyter notebooks for all work, leading to reproducibility issues. Task: Introduce modular code and version control best practices. Action: I created a template repo with proper structure (src/, tests/, configs/), demonstrated how it improved debugging and collaboration, and ran a workshop on pytest and pre-commit hooks. I started by refactoring one small utility. Result: Within a month, 80% of new work used the new structure, and we reduced bugs related to environment issues by 60%.",
-    difficulty: "Hard",
-    starBreakdown: {
-      situation: "The team was using Jupyter notebooks for all work, leading to reproducibility issues.",
-      task: "Introduce modular code and version control best practices.",
-      action: "Created a template repo with proper structure (src/, tests/, configs/), demonstrated how it improved debugging and collaboration, and ran a workshop on pytest and pre-commit hooks. I started by refactoring one small utility.",
-      result: "Within a month, 80% of new work used the new structure, and we reduced bugs related to environment issues by 60%."
-    }
+    question: "Tell me about a time you had to explain a complex technical concept to a non-technical audience.",
+    answer: "Situation: I needed to explain how our churn prediction model worked to the customer success team so they could trust and act on the scores.\nTask: Make the model interpretable and actionable for non-data scientists.\nAction: I avoided jargon like 'log-odds' or 'AUC'. Instead, I used an analogy: 'Think of the model like a weather forecast — it doesn’t guarantee rain, but tells you how likely it is.' I showed a simple decision tree version of the model (depth 3) with clear rules: 'If a user hasn’t logged in in 10 days AND sent <2 support tickets, churn risk is high.' I created a one-page cheat sheet with risk levels (Low/Medium/High) and suggested actions for each. I also showed real examples: 'This user scored 85% risk — here’s why: no login in 18 days, canceled feature X, and declined last upsell.'\nResult: The team started using the scores daily to prioritize outreach. Within 2 months, they reduced churn among high-risk users by 22%. They now request model updates before every campaign.",
   },
   {
     id: 9,
-    question: "Tell me about a time you received critical feedback. How did you respond?",
-    answer: "Situation: My manager said my presentations were too technical and lost the audience. Task: Improve communication clarity. Action: I took a public speaking course, started using the 'rule of three' in talks, and began each presentation with a clear headline and end with a call-to-action. I asked for feedback after each talk. Result: My next presentation to leadership was praised for being clear and action-oriented, leading to faster approval of my project.",
-    difficulty: "Medium",
-    starBreakdown: {
-      situation: "My manager said my presentations were too technical and lost the audience.",
-      task: "Improve communication clarity.",
-      action: "Took a public speaking course, started using the 'rule of three' in talks, and began each presentation with a clear headline and end with a call-to-action. I asked for feedback after each talk.",
-      result: "My next presentation to leadership was praised for being clear and action-oriented, leading to faster approval of my project."
-    }
+    question: "Describe a time you improved a process or system to make it more efficient.",
+    answer: "Situation: Our team spent 8 hours every Monday manually preparing weekly performance reports for executives — copying charts from Jupyter Notebooks into PowerPoint.\nTask: Automate the report generation to save time and reduce errors.\nAction: I built a Python script using Jinja2 templates to generate HTML reports from notebook outputs, then converted them to PDF via WeasyPrint. I parameterized the script to accept a date range and auto-pull data from our data warehouse. I scheduled it to run every Sunday at 8 PM using Airflow. I added email distribution with dynamic recipient lists based on role.\nResult: Report generation time dropped from 8 hours to 8 minutes. Executives received reports 12 hours earlier. Errors from manual copying vanished. The team reclaimed 32 hours/month for analysis work. I open-sourced the template internally, and three other teams adopted it.",
   },
   {
     id: 10,
-    question: "Describe a situation where you had to work under pressure to meet a tight deadline.",
-    answer: "Situation: A client requested a custom churn prediction model with only 5 days’ notice. Task: Deliver a usable model in time. Action: I skipped extensive EDA, used automated feature engineering (FeatureTools), focused on high-impact features, and used XGBoost with early stopping. I delivered daily updates and a simple API. Result: We delivered a working model with 0.78 AUC on time; the client used it to target retention offers and reduced churn by 15% in the first month.",
-    difficulty: "Hard",
-    starBreakdown: {
-      situation: "A client requested a custom churn prediction model with only 5 days’ notice.",
-      task: "Deliver a usable model in time.",
-      action: "Skipped extensive EDA, used automated feature engineering (FeatureTools), focused on high-impact features, and used XGBoost with early stopping. I delivered daily updates and a simple API.",
-      result: "We delivered a working model with 0.78 AUC on time; the client used it to target retention offers and reduced churn by 15% in the first month."
-    }
+    question: "Tell me about a time you had to make a decision with incomplete information.",
+    answer: "Situation: We were deciding whether to delay a product launch to retrain our fraud detection model, but we only had 48 hours of live data post-launch — not enough to confirm drift.\nTask: Decide whether to proceed with launch or delay for retraining.\nAction: I gathered what I could: pre-launch model performance (AUC 0.92), early post-launch metrics (AUC 0.89 over 48h), and business impact estimates (each 1% drop in AUC = ~$200K/month in fraud loss). I consulted the fraud team — they reported a 15% rise in suspicious patterns, but couldn’t confirm if it was real or noise. I applied a Bayesian approach: used prior belief (model stable) and updated with new evidence. I calculated the expected value of delaying vs. launching.\nResult: I recommended proceeding with launch but implementing real-time monitoring with a 72-hour tripwire: if AUC dropped below 0.87, trigger automatic retraining and alert. We launched. After 5 days, AUC stabilized at 0.90 — no retraining needed. The launch proceeded on schedule, gaining us first-mover advantage. I learned that in uncertainty, quantify risk, set monitoring triggers, and decide based on expected value — not perfection.",
   }
 ];
