@@ -2,71 +2,48 @@ import { ProgressData } from '../types';
 
 const STORAGE_KEY = 'ds-interview-prep-progress';
 
-export const loadProgress = (): ProgressData => {
-  if (typeof window === 'undefined') {
-    return getDefaultProgress();
-  }
-
-  const saved = localStorage.getItem(STORAGE_KEY);
-  if (saved) {
-    try {
-      return JSON.parse(saved) as ProgressData;
-    } catch (e) {
-      console.warn('Failed to parse progress data, using defaults');
-      return getDefaultProgress();
-    }
-  }
-  return getDefaultProgress();
-};
-
 export const saveProgress = (progress: ProgressData): void => {
-  if (typeof window === 'undefined') return;
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
-  } catch (e) {
-    console.error('Failed to save progress to localStorage', e);
+  } catch (error) {
+    console.error('Failed to save progress:', error);
+  }
+};
+
+export const loadProgress = (): ProgressData => {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    return saved ? JSON.parse(saved) : {};
+  } catch (error) {
+    console.error('Failed to load progress:', error);
+    return {};
   }
 };
 
 export const updateProgress = (
-  category: keyof ProgressData,
-  increment: number = 1
+  category: string,
+  completed: number,
+  total: number
 ): ProgressData => {
-  const current = loadProgress();
+  const currentProgress = loadProgress();
   const updated = {
-    ...current,
-    [category]: Math.min(
-      current[category] + increment,
-      getCategoryTotal(category)
-    ),
+    ...currentProgress,
+    [category]: { completed, total }
   };
   saveProgress(updated);
   return updated;
 };
 
-export const resetProgress = (): ProgressData => {
-  const defaultProgress = getDefaultProgress();
-  saveProgress(defaultProgress);
-  return defaultProgress;
+export const getProgressPercentage = (category: string): number => {
+  const progress = loadProgress()[category];
+  if (!progress || progress.total === 0) return 0;
+  return Math.round((progress.completed / progress.total) * 100);
 };
 
-const getDefaultProgress = (): ProgressData => ({
-  python: 0,
-  statistics: 0,
-  ml: 0,
-  sql: 0,
-  systemDesign: 0,
-  behavioral: 0,
-});
-
-const getCategoryTotal = (category: keyof ProgressData): number => {
-  switch (category) {
-    case 'python': return 10;
-    case 'statistics': return 8; // Assuming 8 topics
-    case 'ml': return 20;
-    case 'sql': return 15;
-    case 'systemDesign': return 6; // Assuming 6 topics
-    case 'behavioral': return 10; // Assuming 10 questions
-    default: return 0;
+export const resetProgress = (): void => {
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+  } catch (error) {
+    console.error('Failed to reset progress:', error);
   }
 };
